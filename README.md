@@ -15,35 +15,8 @@ This is a backend API for the Atlas Culinary system developed using Spring Boot 
 Create PostgreSQL database:
 ```sql
 CREATE DATABASE atlas_culinary_db;
-```
 
-### 2. Environment Variables Configuration
-
-Copy the example environment file and configure your settings:
-```bash
-cp .env.example .env
-```
-
-Update `.env` file with your actual database credentials:
-```env
-DATABASE_URL=jdbc:postgresql://localhost:5432/atlas_culinary_db
-DATABASE_USERNAME=your_username
-DATABASE_PASSWORD=your_password
-SERVER_PORT=8081
-```
-
-Alternatively, you can set environment variables directly:
-```bash
-# Windows (PowerShell)
-$env:DATABASE_USERNAME="your_username"
-$env:DATABASE_PASSWORD="your_password"
-
-# Linux/Mac
-export DATABASE_USERNAME="your_username"
-export DATABASE_PASSWORD="your_password"
-```
-
-### 3. Build and Run Application
+### 2. Build and Run Application
 
 ```bash
 mvn clean install
@@ -96,15 +69,6 @@ This project is designed using a code-first approach with the following entities
 - **Action**: Available actions
 - **RoleActionMap**: Role-action mapping
 - **AccountRoleMap**: Account-role assignment
-
-## Migration
-
-When running for the first time with `spring.jpa.hibernate.ddl-auto=create-drop`, Hibernate will automatically create all tables according to entity definitions.
-
-For safe production migration, change the configuration:
-```properties
-spring.jpa.hibernate.ddl-auto=validate
-```
 
 ## Supported Use Cases
 
