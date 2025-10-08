@@ -1,6 +1,8 @@
 package com.atlasculinary.controllers;
 
 import com.atlasculinary.dtos.ApiResponse;
+import com.atlasculinary.dtos.LoginRequest;
+import com.atlasculinary.dtos.LoginResponse;
 import com.atlasculinary.dtos.SignUpRequest;
 import com.atlasculinary.services.AuthService;
 import jakarta.validation.Valid;
@@ -22,6 +24,13 @@ public class AuthController {
   public ResponseEntity<ApiResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
     authService.signUp(signUpRequest);
     ApiResponse response = ApiResponse.success("Đăng ký tài khoản thành công");
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+    LoginResponse loginResponse = authService.login(loginRequest);
+    ApiResponse response = ApiResponse.success("Đăng nhập thành công", loginResponse);
     return ResponseEntity.ok(response);
   }
 }
