@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
@@ -16,6 +18,8 @@ import java.util.UUID; // Import UUID
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "account")
+@EqualsAndHashCode(exclude = "account")
 public class UserProfile {
 
     @Id

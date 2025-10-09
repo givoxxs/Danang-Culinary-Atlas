@@ -7,6 +7,8 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -16,6 +18,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"accountRoleMapSet", "notificationSet", "userProfile", "adminProfile", "vendorProfile"})
+@EqualsAndHashCode(exclude = {"accountRoleMapSet", "notificationSet", "userProfile", "adminProfile", "vendorProfile"})
 public class Account {
 
 

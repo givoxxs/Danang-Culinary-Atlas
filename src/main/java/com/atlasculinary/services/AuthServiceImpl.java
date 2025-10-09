@@ -3,13 +3,10 @@ package com.atlasculinary.services;
 import com.atlasculinary.dtos.LoginRequest;
 import com.atlasculinary.dtos.LoginResponse;
 import com.atlasculinary.dtos.SignUpRequest;
-import com.atlasculinary.entities.Account;
-import com.atlasculinary.entities.AccountRoleMap;
-import com.atlasculinary.entities.Role;
+import com.atlasculinary.entities.*;
 import com.atlasculinary.enums.AccountStatus;
-import com.atlasculinary.repositories.AccountRepository;
-import com.atlasculinary.repositories.AccountRoleMapRepository;
-import com.atlasculinary.repositories.RoleRepository;
+import com.atlasculinary.enums.RoleLevel;
+import com.atlasculinary.repositories.*;
 import com.atlasculinary.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -27,11 +25,15 @@ public class AuthServiceImpl implements AuthService {
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
   private final AccountRoleMapRepository accountRoleMapRepository;
+  private final UserProfileRepository userProfileRepository;
+  private final AdminProfileRepository adminProfileRepository;
+  private final VendorProfileRepository vendorProfileRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtUtil jwtUtil;
   private final AuthenticationManager authenticationManager;
 
   @Override
+  @Transactional
   public void signUp(SignUpRequest signUpRequest) {
     if (accountRepository.existsByEmail(signUpRequest.getEmail())) {
       throw new RuntimeException("Email đã tồn tại trong hệ thống");
@@ -53,6 +55,35 @@ public class AuthServiceImpl implements AuthService {
     accountRoleMap.setAccountId(savedAccount.getAccountId());
     accountRoleMap.setRoleId(role.getRoleId());
     accountRoleMapRepository.save(accountRoleMap);
+
+    // Tạo profile tương ứng với role
+    createProfileForAccount(savedAccount, signUpRequest.getRole());
+  }
+
+  private void createProfileForAccount(Account account, com.atlasculinary.enums.AccountRole role) {
+    switch (role) {
+      case USER:
+        UserProfile userProfile = new UserProfile();
+        userProfile.setAccount(account);
+        userProfileRepository.save(userProfile);
+        break;
+
+      case ADMIN:
+        AdminProfile adminProfile = new AdminProfile();
+        adminProfile.setAccount(account);
+        adminProfile.setRoleLevel(RoleLevel.MODERATOR); // Default role level
+        adminProfileRepository.save(adminProfile);
+        break;
+
+      case VENDOR:
+        VendorProfile vendorProfile = new VendorProfile();
+        vendorProfile.setAccount(account);
+        vendorProfileRepository.save(vendorProfile);
+        break;
+
+      default:
+        throw new RuntimeException("Role không được hỗ trợ");
+    }
   }
 
   @Override
