@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Set;
@@ -15,6 +17,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "account")
+@EqualsAndHashCode(exclude = "account")
 public class AdminProfile {
 
     @Id
@@ -39,11 +43,10 @@ public class AdminProfile {
     @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Dish> dishSet = new java.util.HashSet<>();
 
-
-    @Column(name = "phone", length = 15, nullable = false)
+    @Column(name = "phone", length = 15)
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_level", length = 20, nullable = false)
+    @Column(name = "role_level", length = 20)
     private RoleLevel roleLevel;
 }

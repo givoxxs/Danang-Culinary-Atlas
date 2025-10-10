@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Set;
@@ -14,6 +16,8 @@ import java.util.UUID; // Cần import UUID
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "account")
+@EqualsAndHashCode(exclude = "account")
 public class VendorProfile {
 
     @Id
@@ -27,13 +31,13 @@ public class VendorProfile {
     private Account account;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "business_license_id", unique = true, nullable = false)
+    @JoinColumn(name = "business_license_id", unique = true)
     private BusinessLicense businessLicense;
 
     @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Restaurant> restaurantSet = new java.util.HashSet<>();
 
-    @Column(name = "phone", length = 15, nullable = false)
+    @Column(name = "phone", length = 15)
     private String phone;
 
     @Column(name = "description", columnDefinition = "TEXT")
