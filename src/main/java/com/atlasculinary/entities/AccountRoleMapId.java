@@ -13,5 +13,5 @@ import java.util.UUID;
 public class AccountRoleMapId implements Serializable {
 
     private UUID accountId;
-    private UUID roleId;
+    private Long roleId;
 }

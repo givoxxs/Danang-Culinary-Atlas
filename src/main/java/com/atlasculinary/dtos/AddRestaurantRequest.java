@@ -1,5 +1,6 @@
 package com.atlasculinary.dtos;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,9 +12,6 @@ import java.util.UUID;
 @Data
 public class AddRestaurantRequest {
 
-    @NotNull(message = "Vendor ID is required")
-    private UUID vendorId;
-
     @NotBlank(message = "Restaurant name is required")
     private String name;
 
@@ -23,7 +21,7 @@ public class AddRestaurantRequest {
     private String[] images;
 
     @NotNull(message = "Ward ID is required")
-    private UUID wardId;
+    private Integer wardId;
 
     @NotNull(message = "Latitude is required")
     private BigDecimal latitude;

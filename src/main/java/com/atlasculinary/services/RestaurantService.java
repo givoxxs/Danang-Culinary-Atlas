@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface RestaurantService {
 
-    RestaurantDto createRestaurant(AddRestaurantRequest request);
+    RestaurantDto createRestaurant(UUID ownerAccountId, AddRestaurantRequest request);
 
 
     RestaurantDto getRestaurantById(UUID restaurantId);
@@ -30,6 +30,7 @@ public interface RestaurantService {
 
 
     RestaurantDto updateApprovalStatus(
+            UUID adminAccountId,
             UUID restaurantId,
             UpdateApprovalStatusRequest request
     );

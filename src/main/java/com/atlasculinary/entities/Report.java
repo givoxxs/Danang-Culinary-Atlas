@@ -25,8 +25,8 @@ public class Report {
     private UUID reportId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserProfile user;
+    @JoinColumn(name = "reporter_account_id", nullable = false)
+    private Account reporterAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
@@ -48,8 +48,8 @@ public class Report {
     private ReportStatus status = ReportStatus.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "processed_by")
-    private AdminProfile processedBy;
+    @JoinColumn(name = "processor_account_id")
+    private Account processedByAccount;
 
     @Column(name = "processed_at")
     private LocalDateTime processedAt;

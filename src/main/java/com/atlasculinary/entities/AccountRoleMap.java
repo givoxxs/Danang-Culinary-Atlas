@@ -20,8 +20,8 @@ public class AccountRoleMap {
     private UUID accountId;
 
     @Id
-    @Column(name = "role_id", columnDefinition = "UUID")
-    private UUID roleId;
+    @Column(name = "role_id")
+    private Long roleId;
 
     @Column(name = "licensed", nullable = false)
     private Boolean licensed = true;

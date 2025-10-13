@@ -1,4 +1,4 @@
-package com.atlasculinary.services;
+package com.atlasculinary.services.impl;
 
 import com.atlasculinary.dtos.profile.*;
 import com.atlasculinary.entities.Account;
@@ -6,9 +6,10 @@ import com.atlasculinary.entities.UserProfile;
 import com.atlasculinary.entities.AdminProfile;
 import com.atlasculinary.entities.VendorProfile;
 import com.atlasculinary.repositories.AccountRepository;
-import com.atlasculinary.repositories.UserProfileRepository;
-import com.atlasculinary.repositories.AdminProfileRepository;
-import com.atlasculinary.repositories.VendorProfileRepository;
+import com.atlasculinary.repositories.AdminRepository;
+import com.atlasculinary.repositories.UserRepository;
+import com.atlasculinary.repositories.VendorRepository;
+import com.atlasculinary.services.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +20,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileServiceImpl implements ProfileService {
 
   private final AccountRepository accountRepository;
-  private final UserProfileRepository userProfileRepository;
-  private final AdminProfileRepository adminProfileRepository;
-  private final VendorProfileRepository vendorProfileRepository;
+  private final UserRepository userRepository;
+  private final AdminRepository adminRepository;
+  private final VendorRepository vendorRepository;
 
   @Override
   @Transactional(readOnly = true)
   public UserProfileResponseDto getUserProfile(String email) {
-    UserProfile userProfile = userProfileRepository.findByAccountEmail(email)
+    UserProfile userProfile = userRepository.findByAccountEmail(email)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin người dùng"));
 
     return UserProfileResponseDto.builder()
-            .userId(userProfile.getUserId())
+            .userId(userProfile.getAccountId())
             .email(userProfile.getAccount().getEmail())
             .fullName(userProfile.getAccount().getFullName())
             .avatarUrl(userProfile.getAccount().getAvatarUrl())
@@ -41,7 +42,7 @@ public class ProfileServiceImpl implements ProfileService {
 
   @Override
   public UserProfileResponseDto updateUserProfile(String email, UserProfileUpdateDto updateDto) {
-    UserProfile userProfile = userProfileRepository.findByAccountEmail(email)
+    UserProfile userProfile = userRepository.findByAccountEmail(email)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin người dùng"));
 
     Account account = userProfile.getAccount();
@@ -61,10 +62,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     accountRepository.save(account);
-    UserProfile savedProfile = userProfileRepository.save(userProfile);
+    UserProfile savedProfile = userRepository.save(userProfile);
 
     return UserProfileResponseDto.builder()
-            .userId(savedProfile.getUserId())
+            .userId(savedProfile.getAccountId())
             .email(savedProfile.getAccount().getEmail())
             .fullName(savedProfile.getAccount().getFullName())
             .avatarUrl(savedProfile.getAccount().getAvatarUrl())
@@ -76,11 +77,11 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @Transactional(readOnly = true)
   public AdminProfileResponseDto getAdminProfile(String email) {
-    AdminProfile adminProfile = adminProfileRepository.findByAccountEmail(email)
+    AdminProfile adminProfile = adminRepository.findByAccountEmail(email)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin quản trị viên"));
 
     return AdminProfileResponseDto.builder()
-            .adminId(adminProfile.getAdminId())
+            .adminId(adminProfile.getAccountId())
             .email(adminProfile.getAccount().getEmail())
             .fullName(adminProfile.getAccount().getFullName())
             .avatarUrl(adminProfile.getAccount().getAvatarUrl())
@@ -91,7 +92,7 @@ public class ProfileServiceImpl implements ProfileService {
 
   @Override
   public AdminProfileResponseDto updateAdminProfile(String email, AdminProfileUpdateDto updateDto) {
-    AdminProfile adminProfile = adminProfileRepository.findByAccountEmail(email)
+    AdminProfile adminProfile = adminRepository.findByAccountEmail(email)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin quản trị viên"));
 
     Account account = adminProfile.getAccount();
@@ -108,10 +109,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     accountRepository.save(account);
-    AdminProfile savedProfile = adminProfileRepository.save(adminProfile);
+    AdminProfile savedProfile = adminRepository.save(adminProfile);
 
     return AdminProfileResponseDto.builder()
-            .adminId(savedProfile.getAdminId())
+            .adminId(savedProfile.getAccountId())
             .email(savedProfile.getAccount().getEmail())
             .fullName(savedProfile.getAccount().getFullName())
             .avatarUrl(savedProfile.getAccount().getAvatarUrl())
@@ -123,26 +124,26 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @Transactional(readOnly = true)
   public VendorProfileResponseDto getVendorProfile(String email) {
-    VendorProfile vendorProfile = vendorProfileRepository.findByAccountEmail(email)
+    VendorProfile vendorProfile = vendorRepository.findByAccountEmail(email)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin nhà cung cấp"));
 
     return VendorProfileResponseDto.builder()
-            .vendorId(vendorProfile.getVendorId())
+            .vendorId(vendorProfile.getAccountId())
             .email(vendorProfile.getAccount().getEmail())
             .fullName(vendorProfile.getAccount().getFullName())
             .avatarUrl(vendorProfile.getAccount().getAvatarUrl())
             .phone(vendorProfile.getPhone())
             .description(vendorProfile.getDescription())
-            .businessLicenseNumber(vendorProfile.getBusinessLicense() != null ? 
-                vendorProfile.getBusinessLicense().getLicenseNumber() : null)
-            .businessLicenseStatus(vendorProfile.getBusinessLicense() != null ? 
-                vendorProfile.getBusinessLicense().getApprovalStatus().name() : null)
+//            .businessLicenseNumber(vendorProfile.getBusinessLicense() != null ?
+//                vendorProfile.getBusinessLicense().getLicenseNumber() : null)
+//            .businessLicenseStatus(vendorProfile.getBusinessLicense() != null ?
+//                vendorProfile.getBusinessLicense().getApprovalStatus().name() : null)
             .build();
   }
 
   @Override
   public VendorProfileResponseDto updateVendorProfile(String email, VendorProfileUpdateDto updateDto) {
-    VendorProfile vendorProfile = vendorProfileRepository.findByAccountEmail(email)
+    VendorProfile vendorProfile = vendorRepository.findByAccountEmail(email)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin nhà cung cấp"));
 
     Account account = vendorProfile.getAccount();
@@ -162,19 +163,19 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     accountRepository.save(account);
-    VendorProfile savedProfile = vendorProfileRepository.save(vendorProfile);
+    VendorProfile savedProfile = vendorRepository.save(vendorProfile);
 
     return VendorProfileResponseDto.builder()
-            .vendorId(savedProfile.getVendorId())
+            .vendorId(savedProfile.getAccountId())
             .email(savedProfile.getAccount().getEmail())
             .fullName(savedProfile.getAccount().getFullName())
             .avatarUrl(savedProfile.getAccount().getAvatarUrl())
             .phone(savedProfile.getPhone())
             .description(savedProfile.getDescription())
-            .businessLicenseNumber(savedProfile.getBusinessLicense() != null ? 
-                savedProfile.getBusinessLicense().getLicenseNumber() : null)
-            .businessLicenseStatus(savedProfile.getBusinessLicense() != null ? 
-                savedProfile.getBusinessLicense().getApprovalStatus().name() : null)
+//            .businessLicenseNumber(savedProfile.getBusinessLicense() != null ?
+//                savedProfile.getBusinessLicense().getLicenseNumber() : null)
+//            .businessLicenseStatus(savedProfile.getBusinessLicense() != null ?
+//                savedProfile.getBusinessLicense().getApprovalStatus().name() : null)
             .build();
   }
 }

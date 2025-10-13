@@ -26,8 +26,8 @@ public class RecommendationCache {
     private UUID recId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
-    private UserProfile userProfile;
+    @JoinColumn(name = "account_id", unique = true, nullable = false)
+    private Account account;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "recommendations", columnDefinition = "jsonb")

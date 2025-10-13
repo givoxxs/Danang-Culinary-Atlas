@@ -53,8 +53,8 @@ public class Dish {
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by")
-    private AdminProfile approvedBy;
+    @JoinColumn(name = "approved_by_account_id")
+    private Account approvedBy;
     
     @Column(name = "approved_at")
     private LocalDateTime approvedAt;

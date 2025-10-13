@@ -23,30 +23,13 @@ import java.util.UUID; // Import UUID
 public class UserProfile {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @UuidGenerator
-    @Column(name = "user_id", columnDefinition = "UUID")
-    private UUID userId;
+    @Column(name = "account_id", columnDefinition = "UUID")
+    private UUID accountId;
 
-
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", unique = true, nullable = false)
     private Account account;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "recommendation_data_id")
-    private RecommendationCache recommendationData;
-
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SearchHistory> searchHistorySet = new java.util.HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Report> reportSet = new java.util.HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Review> reviewSet = new java.util.HashSet<>();
-
 
     @Column(name = "dob")
     private LocalDate dob;

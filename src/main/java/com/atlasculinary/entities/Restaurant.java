@@ -30,8 +30,8 @@ public class Restaurant {
     private UUID restaurantId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendor_id", nullable = false)
-    private VendorProfile vendor;
+    @JoinColumn(name = "owner_account_id", nullable = false)
+    private Account ownerAccount;
     
     @Column(name = "name", nullable = false)
     private String name;
@@ -58,10 +58,10 @@ public class Restaurant {
     @Enumerated(EnumType.STRING)
     @Column(name = "approval_status", nullable = false, length = 20)
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by")
-    private AdminProfile approvedBy;
+    @JoinColumn(name = "approved_by_account_id")
+    private Account approvedByAccount;
     
     @Column(name = "approved_at")
     private LocalDateTime approvedAt;

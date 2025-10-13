@@ -11,8 +11,5 @@ public class UpdateApprovalStatusRequest {
     @NotNull(message = "Approval status is required")
     private ApprovalStatus status;
 
-    @NotNull(message = "Admin ID is required")
-    private UUID adminId;
-
     private String rejectionReason;
 }

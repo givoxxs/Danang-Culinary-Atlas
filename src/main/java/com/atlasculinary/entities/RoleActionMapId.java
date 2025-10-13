@@ -13,6 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RoleActionMapId implements Serializable {
 
-    private UUID roleId;
-    private UUID actionId;
+    private Long roleId;
+    private Long actionId;
 }

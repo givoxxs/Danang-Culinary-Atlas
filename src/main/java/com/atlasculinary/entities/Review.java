@@ -28,8 +28,8 @@ public class Review {
     private UUID reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserProfile user;
+    @JoinColumn(name = "reviewer_account_id", nullable = false)
+    private Account reviewerAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")

@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
-    Page<Restaurant> findByVendor_VendorId(UUID vendorId, Pageable pageable);
+    Page<Restaurant> findByOwnerAccount_AccountId(UUID vendorId, Pageable pageable);
 }

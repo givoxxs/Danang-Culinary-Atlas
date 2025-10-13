@@ -16,12 +16,12 @@ import java.util.UUID; // Cần import UUID
 public class RoleActionMap {
 
     @Id
-    @Column(name = "role_id", columnDefinition = "UUID")
-    private UUID roleId;
+    @Column(name = "role_id")
+    private Long roleId;
 
     @Id
-    @Column(name = "action_id", columnDefinition = "UUID")
-    private UUID actionId;
+    @Column(name = "action_id")
+    private Long actionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("roleId")

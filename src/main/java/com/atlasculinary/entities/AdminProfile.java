@@ -22,26 +22,13 @@ import java.util.UUID;
 public class AdminProfile {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @UuidGenerator
-    @Column(name = "admin_id", columnDefinition = "UUID")
-    private UUID adminId;
+    @Column(name = "account_id", columnDefinition = "UUID")
+    private UUID accountId;
 
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", unique = true, nullable = false)
     private Account account;
-
-    @OneToMany(mappedBy = "processedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Report> reportSet = new java.util.HashSet<>();
-
-    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BusinessLicense> businessLicenseSet = new java.util.HashSet<>();
-
-    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Restaurant> restaurantSet = new java.util.HashSet<>();
-
-    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Dish> dishSet = new java.util.HashSet<>();
 
     @Column(name = "phone", length = 15)
     private String phone;

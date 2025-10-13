@@ -16,10 +16,9 @@ import java.util.UUID; // Cần import UUID
 public class Role {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @UuidGenerator
-    @Column(name = "role_id", columnDefinition = "UUID")
-    private UUID roleId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
+    private Long roleId;
 
     @Column(name = "role_name", nullable = false, unique = true, length = 50)
     private String roleName;

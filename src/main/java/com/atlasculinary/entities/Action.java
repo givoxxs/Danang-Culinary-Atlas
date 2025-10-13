@@ -16,10 +16,9 @@ import java.util.UUID; // Cần import UUID
 public class Action {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @UuidGenerator
-    @Column(name = "action_id", columnDefinition = "UUID")
-    private UUID actionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "action_id")
+    private Long actionId;
 
     @Column(name = "action_name", nullable = false, length = 100)
     private String actionName;

@@ -18,7 +18,7 @@ public class ProfileController {
   private final ProfileService profileService;
 
   @GetMapping("/user")
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<ApiResponse> getUserProfile(Authentication authentication) {
     String email = authentication.getName();
     UserProfileResponseDto profile = profileService.getUserProfile(email);
@@ -26,7 +26,7 @@ public class ProfileController {
   }
 
   @PutMapping("/user")
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<ApiResponse> updateUserProfile(
         @Valid @RequestBody UserProfileUpdateDto updateDto,
         Authentication authentication) {
@@ -36,7 +36,7 @@ public class ProfileController {
   }
 
   @GetMapping("/admin")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<ApiResponse> getAdminProfile(Authentication authentication) {
     String email = authentication.getName();
     AdminProfileResponseDto profile = profileService.getAdminProfile(email);
@@ -44,7 +44,7 @@ public class ProfileController {
   }
 
   @PutMapping("/admin")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<ApiResponse> updateAdminProfile(
         @Valid @RequestBody AdminProfileUpdateDto updateDto,
         Authentication authentication) {
@@ -54,7 +54,7 @@ public class ProfileController {
   }
 
   @GetMapping("/vendor")
-  @PreAuthorize("hasRole('VENDOR')")
+  @PreAuthorize("hasAuthority('VENDOR')")
   public ResponseEntity<ApiResponse> getVendorProfile(Authentication authentication) {
     String email = authentication.getName();
     VendorProfileResponseDto profile = profileService.getVendorProfile(email);
@@ -62,7 +62,7 @@ public class ProfileController {
   }
 
   @PutMapping("/vendor")
-  @PreAuthorize("hasRole('VENDOR')")
+  @PreAuthorize("hasAuthority('VENDOR')")
   public ResponseEntity<ApiResponse> updateVendorProfile(
         @Valid @RequestBody VendorProfileUpdateDto updateDto,
         Authentication authentication) {

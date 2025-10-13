@@ -25,8 +25,8 @@ public class SearchHistory {
     private Long historyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserProfile user;
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
     @Column(name = "keyword", nullable = false, length = 500)
     private String keyword;

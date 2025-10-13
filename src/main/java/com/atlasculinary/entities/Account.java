@@ -18,8 +18,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"accountRoleMapSet", "notificationSet", "userProfile", "adminProfile", "vendorProfile"})
-@EqualsAndHashCode(exclude = {"accountRoleMapSet", "notificationSet", "userProfile", "adminProfile", "vendorProfile"})
+@ToString(exclude = {"accountRoleMapSet", "userProfile", "adminProfile", "vendorProfile"})
+@EqualsAndHashCode(exclude = {"accountRoleMapSet", "userProfile", "adminProfile", "vendorProfile"})
 public class Account {
 
 
@@ -43,12 +43,12 @@ public class Account {
     )
     private Set<AccountRoleMap> accountRoleMapSet = new java.util.HashSet<>();
 
-    @OneToMany(
-            mappedBy = "account",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<Notification> notificationSet = new java.util.HashSet<>();
+//    @OneToMany(
+//            mappedBy = "account",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
+//    private Set<Notification> notificationSet = new java.util.HashSet<>();
 
 
     @Enumerated(EnumType.STRING)
@@ -77,5 +77,41 @@ public class Account {
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private VendorProfile vendorProfile;
+
+//    // User
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "recommendation_data_id")
+//    private RecommendationCache recommendationData;
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<SearchHistory> searchHistorySet = new java.util.HashSet<>();
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Report> reportSet = new java.util.HashSet<>();
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Review> reviewSet = new java.util.HashSet<>();
+//
+//    // Vendor
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "business_license_id", unique = true)
+//    private BusinessLicense businessLicense;
+//
+//    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private Set<Restaurant> restaurantSet = new java.util.HashSet<>();
+//
+//    // Admin
+//    @OneToMany(mappedBy = "processedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Report> reportSet = new java.util.HashSet<>();
+//
+//    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<BusinessLicense> businessLicenseSet = new java.util.HashSet<>();
+//
+//    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Restaurant> restaurantSet = new java.util.HashSet<>();
+//
+//    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Dish> dishSet = new java.util.HashSet<>();
+
 
 }

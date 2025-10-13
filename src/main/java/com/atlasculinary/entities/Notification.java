@@ -15,7 +15,6 @@ import java.util.UUID; // Cần thiết vì Account.accountId là UUID
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
@@ -29,11 +28,17 @@ public class Notification {
     @Column(name = "type", nullable = false, length = 50)
     private NotificationType type;
 
+    @Column(name = "title", columnDefinition = "TEXT", nullable = false)
+    private String title;
+
     @Column(name = "message", columnDefinition = "TEXT", nullable = false)
     private String message;
 
     @Column(name = "is_read", nullable = false)
     private Boolean isRead = false;
+
+    @Column(name = "target_url")
+    private String targetUrl;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

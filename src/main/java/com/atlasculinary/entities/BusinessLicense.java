@@ -24,12 +24,13 @@ public class BusinessLicense {
     @Column(name = "license_id", columnDefinition = "UUID")
     private UUID licenseId;
 
-    @OneToOne(mappedBy = "businessLicense", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private VendorProfile vendor;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_account_id", unique = true, nullable = false)
+    private Account ownerAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by")
-    private AdminProfile approvedBy;
+    @JoinColumn(name = "approved_by_account_id")
+    private Account approvedByAccount;
 
     @Column(name = "license_number", nullable = false, unique = true, length = 50)
     private String licenseNumber;

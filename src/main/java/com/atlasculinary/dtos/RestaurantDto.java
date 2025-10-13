@@ -11,7 +11,7 @@ import java.util.UUID;
 public class RestaurantDto {
     private UUID restaurantId;
 
-    private UUID vendorId;
+    private UUID ownerAccountId;
 
     private String name;
 
@@ -27,7 +27,7 @@ public class RestaurantDto {
 
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 
-    private UUID approvedById;
+    private UUID approvedByAccountId;
 
     private LocalDateTime approvedAt;
 

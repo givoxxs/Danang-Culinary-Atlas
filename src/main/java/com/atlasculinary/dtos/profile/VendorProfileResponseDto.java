@@ -18,6 +18,6 @@ public class VendorProfileResponseDto {
   private String avatarUrl;
   private String phone;
   private String description;
-  private String businessLicenseNumber;
-  private String businessLicenseStatus;
+//  private String businessLicenseNumber;
+//  private String businessLicenseStatus;
 }

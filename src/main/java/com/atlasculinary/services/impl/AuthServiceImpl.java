@@ -1,4 +1,4 @@
-package com.atlasculinary.services;
+package com.atlasculinary.services.impl;
 
 import com.atlasculinary.dtos.LoginRequest;
 import com.atlasculinary.dtos.LoginResponse;
@@ -7,6 +7,7 @@ import com.atlasculinary.entities.*;
 import com.atlasculinary.enums.AccountStatus;
 import com.atlasculinary.enums.RoleLevel;
 import com.atlasculinary.repositories.*;
+import com.atlasculinary.services.AuthService;
 import com.atlasculinary.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,18 +17,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
+    private static final Logger LOGGER = Logger.getLogger(AuthServiceImpl.class.getName());
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
   private final AccountRoleMapRepository accountRoleMapRepository;
-  private final UserProfileRepository userProfileRepository;
-  private final AdminProfileRepository adminProfileRepository;
-  private final VendorProfileRepository vendorProfileRepository;
+  private final UserRepository userRepository;
+  private final AdminRepository adminRepository;
+  private final VendorRepository vendorRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtUtil jwtUtil;
   private final AuthenticationManager authenticationManager;
@@ -44,6 +47,10 @@ public class AuthServiceImpl implements AuthService {
     account.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
     account.setStatus(AccountStatus.ACTIVE);
 
+    List<Role> roleList = roleRepository.findAll();
+    for (var role: roleList) {
+        LOGGER.severe(role.getRoleName() + " " +  role.getDescription());
+    }
     Role role = roleRepository.findByRoleName(signUpRequest.getRole().name())
             .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
 
@@ -56,29 +63,29 @@ public class AuthServiceImpl implements AuthService {
     accountRoleMap.setRoleId(role.getRoleId());
     accountRoleMapRepository.save(accountRoleMap);
 
-    // Tạo profile tương ứng với role
-    createProfileForAccount(savedAccount, signUpRequest.getRole());
+    // Tạo  tương ứng với role
+    createForAccount(savedAccount, signUpRequest.getRole());
   }
 
-  private void createProfileForAccount(Account account, com.atlasculinary.enums.AccountRole role) {
+  private void createForAccount(Account account, com.atlasculinary.enums.AccountRole role) {
     switch (role) {
       case USER:
-        UserProfile userProfile = new UserProfile();
-        userProfile.setAccount(account);
-        userProfileRepository.save(userProfile);
+        UserProfile user = new UserProfile();
+        user.setAccount(account);
+        userRepository.save(user);
         break;
 
       case ADMIN:
-        AdminProfile adminProfile = new AdminProfile();
-        adminProfile.setAccount(account);
-        adminProfile.setRoleLevel(RoleLevel.MODERATOR); // Default role level
-        adminProfileRepository.save(adminProfile);
+        AdminProfile admin = new AdminProfile();
+        admin.setAccount(account);
+        admin.setRoleLevel(RoleLevel.MODERATOR); // Default role level
+        adminRepository.save(admin);
         break;
 
       case VENDOR:
-        VendorProfile vendorProfile = new VendorProfile();
-        vendorProfile.setAccount(account);
-        vendorProfileRepository.save(vendorProfile);
+        VendorProfile vendor = new VendorProfile();
+        vendor.setAccount(account);
+        vendorRepository.save(vendor);
         break;
 
       default:
@@ -106,15 +113,17 @@ public class AuthServiceImpl implements AuthService {
         throw new RuntimeException("Tài khoản đã bị xóa");
       }
 
-      String token = jwtUtil.generateToken(account.getEmail());
+
 
       var roleMapList = accountRoleMapRepository.findByAccountIdWithRole(account.getAccountId());
-      
+
       var roles = roleMapList.stream()
         .map(roleMap -> {
           return roleMap.getRole().getRoleName();
         })
         .collect(Collectors.toList());
+      LOGGER.severe("Roles" + roles);
+      String token = jwtUtil.generateToken(account.getEmail(), roles);
 
       return LoginResponse.builder()
           .token(token)

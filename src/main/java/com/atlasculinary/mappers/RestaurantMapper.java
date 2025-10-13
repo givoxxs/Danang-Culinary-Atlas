@@ -1,22 +1,24 @@
 package com.atlasculinary.mappers;
 
+import com.atlasculinary.dtos.AddRestaurantRequest;
 import com.atlasculinary.dtos.RestaurantDto;
 import com.atlasculinary.dtos.UpdateRestaurantRequest;
 import com.atlasculinary.entities.Restaurant;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel="spring")
 public interface RestaurantMapper {
 
-    @Mapping(source = "vendor.vendorId", target = "vendorId")
+    @Mapping(source = "ownerAccount.accountId", target = "ownerAccountId")
     @Mapping(source = "ward.wardId", target = "wardId")
-    @Mapping(source = "approvedBy.adminId", target = "approvedById")
+    @Mapping(source = "approvedByAccount.accountId", target = "approvedByAccountId")
     RestaurantDto toDto(Restaurant entity);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateRestaurantFromRequest(
             UpdateRestaurantRequest request,
             @MappingTarget Restaurant targetEntity
     );
+
+    Restaurant toEntity(AddRestaurantRequest request);
 }
