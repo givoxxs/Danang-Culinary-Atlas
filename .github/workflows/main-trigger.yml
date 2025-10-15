@@ -1,0 +1,28 @@
+name: Main CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Job 1: Chạy CI để kiểm tra code
+  validate:
+    uses: ./.github/workflows/reusable-ci.yml@ci-cd-workflows
+
+  # Job 2: Deploy nếu CI thành công
+  deploy:
+    needs: validate # Chạy sau khi job 'validate' thành công
+    uses: ./.github/workflows/reusable-cd.yml@ci-cd-workflows
+    with:
+      # Truyền toàn bộ secrets vào workflow CD
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+      SPRING_MAIL_HOST: ${{ secrets.SPRING_MAIL_HOST }}
+      SPRING_MAIL_PORT: ${{ secrets.SPRING_MAIL_PORT }}
+      SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
+      SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
