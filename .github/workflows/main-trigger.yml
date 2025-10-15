@@ -9,12 +9,12 @@ on:
 jobs:
   # Job 1: Chạy CI để kiểm tra code
   validate:
-    uses: ./.github/workflows/reusable-ci.yml@ci-cd-workflows
+    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-ci.yml@ci-cd-workflows
 
   # Job 2: Deploy nếu CI thành công
   deploy:
     needs: validate # Chạy sau khi job 'validate' thành công
-    uses: ./.github/workflows/reusable-cd.yml@ci-cd-workflows
+    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-cd.yml@ci-cd-workflows
     # 'with' chỉ dùng cho inputs thông thường, không phải secrets.
     # Khối 'secrets' phải được định nghĩa riêng như thế này.
     secrets:
