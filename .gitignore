@@ -1,6 +1,7 @@
 # Environment Variables
 application.yml
-
+.env
+HELP.md
 # IDE
 .vscode/
 .idea/
