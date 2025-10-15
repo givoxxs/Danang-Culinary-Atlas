@@ -1,9 +1,10 @@
+# FILE ĐÃ SỬA LỖI
 name: Main CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   # Job 1: Chạy CI để kiểm tra code
@@ -14,8 +15,9 @@ jobs:
   deploy:
     needs: validate # Chạy sau khi job 'validate' thành công
     uses: ./.github/workflows/reusable-cd.yml@ci-cd-workflows
-    with:
-      # Truyền toàn bộ secrets vào workflow CD
+    # 'with' chỉ dùng cho inputs thông thường, không phải secrets.
+    # Khối 'secrets' phải được định nghĩa riêng như thế này.
+    secrets:
       DB_URL: ${{ secrets.DB_URL }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
