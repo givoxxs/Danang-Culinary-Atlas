@@ -3,8 +3,9 @@ name: Main CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - master
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
 
 jobs:
   # Job 1: Chạy CI để kiểm tra code
@@ -14,6 +15,7 @@ jobs:
   # Job 2: Deploy nếu CI thành công
   deploy:
     needs: validate # Chạy sau khi job 'validate' thành công
+    if: github.ref == 'refs/heads/master'
     uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-cd.yml@ci-cd-workflows
     # 'with' chỉ dùng cho inputs thông thường, không phải secrets.
     # Khối 'secrets' phải được định nghĩa riêng như thế này.
