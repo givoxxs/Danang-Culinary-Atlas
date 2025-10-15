@@ -1,6 +1,7 @@
 package com.atlasculinary;
 
-// Import các class cần thiết
+// Import các class cần được mock
+import com.atlasculinary.securities.JwtTokenProvider; // Quan trọng: import đúng class của bạn
 import com.cloudinary.Cloudinary;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,26 +11,29 @@ import org.springframework.mail.javamail.JavaMailSender;
 @SpringBootTest
 class AtlasCulinaryBackendApplicationTests {
 
-    /**
-     * @MockBean sẽ thay thế Bean Cloudinary thật trong ApplicationContext
-     * bằng một đối tượng giả lập (mock).
-     * Điều này đảm bảo không có kết nối nào đến dịch vụ Cloudinary được thực hiện.
-     */
+    // Bean đã mock thành công từ trước
     @MockBean
     private Cloudinary cloudinary;
 
-    /**
-     * Tương tự, @MockBean sẽ thay thế Bean JavaMailSender thật
-     * bằng một đối tượng giả lập.
-     * Điều này đảm bảo ứng dụng không cố gắng kết nối đến mail server.
-     */
+    // Bean đã mock thành công từ trước
     @MockBean
     private JavaMailSender javaMailSender;
 
+    /**
+     * ======================================================================
+     * BỔ SUNG QUAN TRỌNG NHẤT
+     * ======================================================================
+     * Giả lập JwtTokenProvider. Đây là Bean yêu cầu thuộc tính 'jwt.secret'
+     * để khởi tạo. Bằng cách mock nó, chúng ta ngăn Spring cố gắng tạo
+     * Bean thật, qua đó loại bỏ hoàn toàn lỗi liên quan đến cấu hình JWT.
+     */
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+
     @Test
     void contextLoads() {
-        // Bài test này bây giờ sẽ kiểm tra xem ApplicationContext
-        // có thể khởi động thành công với các Bean đã được giả lập hay không.
+        // Test này sẽ kiểm tra context có thể load thành công
+        // với TẤT CẢ các phụ thuộc ngoại vi đã được giả lập hay không.
     }
 
 }
