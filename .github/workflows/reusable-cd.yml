@@ -36,6 +36,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with: 
+          path: /home/ubuntu/danang-culinary-atlas
+
+      - name: Verify files in working directory
+        run: |
+          ls -la
+          echo "Working directory verified successfully."
 
       - name: Create .env file from secrets
         run: |
