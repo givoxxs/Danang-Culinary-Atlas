@@ -52,6 +52,10 @@ jobs:
           SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}
           EOF
           echo ".env file created successfully."
+      
+      - name: Display .env file content for debugging
+        working-directory: ${{ github.workspace }}
+        run: cat .env
 
       - name: Deploy with Docker Compose
         working-directory: ${{ github.workspace }}
