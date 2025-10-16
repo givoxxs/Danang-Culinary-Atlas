@@ -9,18 +9,18 @@ on:
 jobs:
   # Job 1: Build và tạo artifact
   build:
-    uses: ./.github/workflows/reusable-ci-build.yml@ci-cd-workflows
+    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-ci-build.yml@ci-cd-workflows
 
   # Job 2: Chờ approve, chỉ chạy sau khi build thành công
   confirm:
     needs: build
     if: github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/reusable-confirm.yml@ci-cd-workflows
+    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-confirm.yml@ci-cd-workflows
     secrets: inherit
 
   # Job 3: Deploy, chỉ chạy sau khi được approve
   deploy:
     needs: confirm
     if: github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/reusable-cd-deploy.yml@ci-cd-workflows
+    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-cd-deploy.yml@ci-cd-workflows
     secrets: inherit
