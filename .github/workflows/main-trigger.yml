@@ -1,32 +1,26 @@
-# FILE ĐÃ SỬA LỖI
-name: Main CI/CD Pipeline
+name: Main CI/CD Pipeline with Approval
 
 on:
   push:
-    branches: ["*"]
+    branches: ["master"]
   pull_request:
-    branches: ["*"]
+    branches: ["master"]
 
 jobs:
-  # Job 1: Chạy CI để kiểm tra code
-  validate:
-    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-ci.yml@ci-cd-workflows
+  # Job 1: Build và tạo artifact
+  build:
+    uses: ./.github/workflows/reusable-ci-build.yml@ci-cd-workflows
 
-  # Job 2: Deploy nếu CI thành công
-  deploy:
-    needs: validate # Chạy sau khi job 'validate' thành công
+  # Job 2: Chờ approve, chỉ chạy sau khi build thành công
+  confirm:
+    needs: build
     if: github.ref == 'refs/heads/master'
-    uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-cd.yml@ci-cd-workflows
-    # 'with' chỉ dùng cho inputs thông thường, không phải secrets.
-    # Khối 'secrets' phải được định nghĩa riêng như thế này.
-    secrets:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      SERVER_PORT: ${{ secrets.SERVER_PORT }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
-      SPRING_MAIL_HOST: ${{ secrets.SPRING_MAIL_HOST }}
-      SPRING_MAIL_PORT: ${{ secrets.SPRING_MAIL_PORT }}
-      SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
-      SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+    uses: ./.github/workflows/reusable-confirm.yml@ci-cd-workflows
+    secrets: inherit
+
+  # Job 3: Deploy, chỉ chạy sau khi được approve
+  deploy:
+    needs: confirm
+    if: github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/reusable-cd-deploy.yml@ci-cd-workflows
+    secrets: inherit

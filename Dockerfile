@@ -1,15 +1,17 @@
-# Stage 1: Build the application using Maven
-FROM maven:3.8.5-openjdk-17 AS build
-WORKDIR /app
-COPY . .
-# Bỏ qua test khi build, vì chúng ta đã có job test riêng trong CI
-RUN mvn clean install -DskipTests
-
-# Stage 2: Create the final, smaller image
+# Sử dụng một image OpenJDK gọn nhẹ
 FROM openjdk:17-jdk-slim
+
+# Đặt thư mục làm việc
 WORKDIR /app
-# Lấy file jar từ stage build
-COPY --from=build /app/target/*.jar app.jar
-# Expose port mà ứng dụng sẽ chạy (lấy từ biến môi trường)
+
+# Lệnh ARG để khai báo một biến có thể được truyền vào lúc build
+ARG JAR_FILE=target/*.jar
+
+# Sao chép file .jar (đã được build sẵn từ job CI) vào container
+COPY ${JAR_FILE} app.jar
+
+# Expose port
 EXPOSE 8081
+
+# Lệnh khởi động ứng dụng
 ENTRYPOINT ["java", "-jar", "app.jar"]
