@@ -11,12 +11,14 @@ jobs:
   build:
     uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-ci-build.yml@ci-cd-workflows
 
+  # Job 2: Confirm deployment
   confirm:
     needs: build
     if: github.ref == 'refs/heads/master'
     uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-confirm.yml@ci-cd-workflows
     secrets: inherit
 
+  # Job 3: Deploy application
   deploy:
     needs: confirm
     if: github.ref == 'refs/heads/master'
