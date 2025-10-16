@@ -7,7 +7,7 @@ on:
     branches: ["master"]
 
 jobs:
-  # Job 1: Build và tạo artifact
+  # Job 1: Build and create artifact
   build:
     uses: givoxxs/Danang-Culinary-Atlas/.github/workflows/reusable-ci-build.yml@ci-cd-workflows
 
